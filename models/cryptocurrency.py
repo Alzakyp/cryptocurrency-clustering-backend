@@ -13,6 +13,8 @@ class Cryptocurrency(db.Model):
     market_cap = db.Column(db.Numeric(30, 2))
     volume_24h = db.Column(db.Numeric(30, 2))
     circulating_supply = db.Column(db.Numeric(30, 2))
+    # Tambahkan foreign key ke Dataset
+    dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id', ondelete='CASCADE'))
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -27,6 +29,7 @@ class Cryptocurrency(db.Model):
             'market_cap': self.market_cap,
             'volume_24h': self.volume_24h,
             'circulating_supply': self.circulating_supply,
+            'dataset_id': self.dataset_id,
             'last_updated': self.last_updated.isoformat() if self.last_updated else None,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }

@@ -9,7 +9,19 @@ logger = logging.getLogger(__name__)
 class CryptoController:
     @staticmethod
     def get_all():
-        result, status_code = CryptoService.get_all_cryptocurrencies()
+        """Get all cryptocurrencies or filter by dataset_id if provided"""
+        # Check for dataset_id query parameter
+        dataset_id = request.args.get('dataset_id')
+    
+        if dataset_id:
+            try:
+                dataset_id = int(dataset_id)
+                result, status_code = CryptoService.get_cryptocurrencies_by_dataset(dataset_id)
+            except ValueError:
+                return jsonify({'success': False, 'message': 'Invalid dataset_id parameter'}), 400
+        else:
+            result, status_code = CryptoService.get_all_cryptocurrencies()
+    
         return jsonify(result), status_code
     
     @staticmethod
